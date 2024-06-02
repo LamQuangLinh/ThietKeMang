@@ -1,0 +1,383 @@
+Ôn thi cuối kỳ thiết kế mạng Đề 1
+
+configure terminal
+line vty 0 15
+password ctk44mmt
+login
+exit
+enable password ctk44mmt
+end
+write memory
+DS1
+en
+conf t
+vlan 101
+Name KeToan
+vlan 102
+Name NhanSu
+exit
+vlan 999
+Name Management
+exit
+int VLAN101
+ip add 10.0.101.1 255.255.255.0
+exit
+int VLAN102
+ip add 10.0.102.1 255.255.255.0
+exit
+int VLAN999
+ip add 10.99.9.1 255.255.255.0
+exit
+vtp domain ITDLU
+vtp password mangmaytinh
+vtp mode server
+int Gi1/1/1
+no switchport
+ip add 10.0.1.2 255.255.255.252
+no shut
+int Gi1/1/2
+no switchport
+ip add 10.0.1.9 255.255.255.252
+no shut
+
+router eigrp 100
+net 10.0.1.9 0.0.0.3
+net 10.0.1.2 0.0.0.3
+exit
+ip dhcp excluded-address 10.0.102.0 10.0.102.1
+ip dhcp pool NhanSu
+ network 10.0.102.1 255.255.255.0
+ default-router 10.0.102.0
+ dns-server 10.0.10.10
+exit
+ip dhcp excluded-address 10.0.101.0 10.0.101.1
+ip dhcp pool KeToan
+ network 10.0.101.1 255.255.255.0
+ default-router 10.0.101.0
+ dns-server 10.0.10.10
+
+enable
+configure terminal
+hostname DS1
+line vty 0 15
+password ctk44mmt
+login
+exit
+enable password ctk44mmt
+end
+write memory
+
+spanning-tree vlan 101 root primary
+spanning-tree vlan 102 root primary
+spanning-tree vlan 999 root primary
+end
+write memory
+
+
+
+DS2
+En
+Conf t
+Vlan 103
+Name Dev
+exit
+Vlan 104
+Name Wifi
+exit
+Vlan 999
+Name Management
+exit
+int VLAN103
+ip add 10.0.103.1 255.255.255.0
+exit
+int VLAN104
+ip add 10.0.104.1 255.255.255.0
+exit
+int VLAN999
+ip add 10.99.9.2 255.255.255.0
+exit
+
+En
+Conf t
+Vtp domain ITDLU
+Vtp password mangmaytinh
+Vtp mode client
+
+en
+conf t
+int Gi1/1/1
+no switchport
+ip add 10.0.1.6 255.255.255.252
+no shut
+int Gi1/1/2
+no switchport
+ip add 10.0.1.10 255.255.255.252
+no shut
+exit
+router eigrp 100
+net 10.0.1.6 0.0.0.3
+net 10.0.1.10 0.0.0.3
+
+ip dhcp excluded-address 10.0.103.0 10.0.103.1
+ip dhcp pool Dev
+ network 10.0.103.1 255.255.255.0
+ default-router 10.0.103.0
+ dns-server 10.0.10.10
+exit
+ip dhcp excluded-address 10.0.104.0 10.0.104.1
+ip dhcp pool WIFI
+ network 10.0.104.1 255.255.255.0
+ default-router 10.0.104.0
+ dns-server 10.0.10.10
+
+enable
+configure terminal
+hostname DS2
+line vty 0 15
+password ctk44mmt
+login
+exit
+enable password ctk44mmt
+end
+write memory
+
+spanning-tree vlan 103 root primary
+spanning-tree vlan 104 root primary
+
+end
+write memory
+
+
+
+SW-A1
+en
+conf t
+Vlan 101
+Name KeToan
+exit
+Vlan 102
+Name NhanSu
+Exit
+Vlan 103
+Name Dev
+exit
+Vlan 104
+Name Wifi
+exit
+Vlan 999
+Name Management
+Exit
+int VLAN999
+ip add 10.99.9.11 255.255.255.0
+exit
+Vtp domain ITDLU
+Vtp password mangmaytinh
+Vtp mode client
+
+interface range GigabitEthernet0/1 - 2
+switchport mode trunk
+
+interface range FastEthernet0/1 - 24
+spanning-tree portfast
+
+interface range FastEthernet0/1 - 10
+switchport mode access
+switchport access vlan 101
+
+interface range FastEthernet0/11 - 20
+switchport mode access
+switchport access vlan 102
+
+interface range FastEthernet0/21 - 24
+switchport mode access
+switchport access vlan 104
+
+hostname SW-A1
+line vty 0 15
+password ctk44mmt
+login
+exit
+enable password ctk44mmt
+end
+write memory
+
+spanning-tree vlan 101 priority 4096
+spanning-tree vlan 102 priority 4096
+spanning-tree vlan 103 priority 4096
+spanning-tree vlan 104 priority 4096
+spanning-tree vlan 999 priority 4096
+
+end
+write memory
+SW-A2
+en
+conf t
+Vlan 101
+Name KeToan
+exit
+Vlan 102
+Name NhanSu
+Exit
+Vlan 103
+Name Dev
+exit
+Vlan 104
+Name Wifi
+exit
+Vlan 999
+Name Management
+Exit
+int VLAN999
+ip add 10.99.9.12 255.255.255.0
+exit
+Vtp domain ITDLU
+Vtp password mangmaytinh
+Vtp mode client
+
+interface range GigabitEthernet0/1 - 2
+switchport mode trunk
+
+interface range FastEthernet0/1 - 24
+spanning-tree portfast
+
+interface range FastEthernet0/1 - 10
+switchport mode access
+switchport access vlan 101
+
+interface range FastEthernet0/11 - 20
+switchport mode access
+switchport access vlan 102
+
+interface range FastEthernet0/21 - 24
+switchport mode access
+switchport access vlan 104
+
+hostname SW-A2
+line vty 0 15
+password ctk44mmt
+login
+exit
+enable password ctk44mmt
+end
+write memory
+
+spanning-tree vlan 101 priority 4096
+spanning-tree vlan 102 priority 4096
+spanning-tree vlan 103 priority 4096
+spanning-tree vlan 104 priority 4096
+spanning-tree vlan 999 priority 4096
+
+end
+write memory
+
+SW-A3
+en
+conf t
+Vlan 101
+Name KeToan
+exit
+Vlan 102
+Name NhanSu
+Exit
+Vlan 103
+Name Dev
+exit
+Vlan 104
+Name Wifi
+exit
+Vlan 999
+Name Management
+Exit
+int VLAN999
+ip add 10.99.9.13 255.255.255.0
+exit
+Vtp domain ITDLU
+Vtp password mangmaytinh
+Vtp mode client
+exit
+interface range FastEthernet0/1 - 24
+spanning-tree portfast
+
+interface range FastEthernet0/1 - 20
+switchport mode access
+switchport access vlan 103
+
+interface range FastEthernet0/21 - 24
+switchport mode access
+switchport access vlan 104
+
+hostname SW-A3
+line vty 0 15
+password ctk44mmt
+login
+exit
+enable password ctk44mmt
+end
+write memory
+
+spanning-tree vlan 101 priority 4096
+spanning-tree vlan 102 priority 4096
+spanning-tree vlan 103 priority 4096
+spanning-tree vlan 104 priority 4096
+spanning-tree vlan 999 priority 4096
+
+end
+write memory
+
+SW-A4
+en
+conf t
+Vlan 101
+Name KeToan
+exit
+Vlan 102
+Name NhanSu
+Exit
+Vlan 103
+Name Dev
+exit
+Vlan 104
+Name Wifi
+exit
+Vlan 999
+Name Management
+Exit
+int VLAN999
+ip add 10.99.9.14 255.255.255.0
+exit
+Vtp domain ITDLU
+Vtp password mangmaytinh
+Vtp mode client
+
+interface range FastEthernet0/1 - 24
+spanning-tree portfast
+
+interface range FastEthernet0/1 - 20
+switchport mode access
+switchport access vlan 103
+
+interface range FastEthernet0/21 - 24
+switchport mode access
+switchport access vlan 104
+
+hostname SW-A4
+line vty 0 15
+password ctk44mmt
+login
+exit
+enable password ctk44mmt
+end
+write memory
+
+spanning-tree vlan 101 priority 4096
+spanning-tree vlan 102 priority 4096
+spanning-tree vlan 103 priority 4096
+spanning-tree vlan 104 priority 4096
+spanning-tree vlan 999 priority 4096
+
+end
+write memory
+
+
+
+
